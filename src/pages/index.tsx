@@ -5,8 +5,9 @@ import { useState } from "react";
 export default function Home() {
   const [stringInput, setStringInput] = useState("");
   const [output, setOutput] = useState("");
-  const [shiftDirection, setShiftDirection] = useState("left");
-  const [switchPart, setSwitchPart] = useState("sound");
+  const [shiftDirection, setShiftDirection] = useState("left"); // left, right
+  const [switchPart, setSwitchPart] = useState("sound"); // sound, letter
+  const [ignoreCertainWords, setIgnoreCertainWords] = useState("singleLetter"); // singleLetter (one-letter words), vowelStart (words that start with a vowel), none
 
   function spoonerize(string: string) {
     // initialize 2 arrays containing each word in the inputted text
@@ -20,6 +21,28 @@ export default function Home() {
       .replaceAll(/\s/g, " ")
       .split(" ")
       .filter((n) => n);
+
+    // initialize array containing each word in the inputted text (includes words that could be ignored)
+    const originalWordsArray = string
+      .toLocaleLowerCase()
+      .replaceAll(/\s/g, " ")
+      .split(" ")
+      .filter((n) => n);
+
+    // remove ignored words from the 2 word arrays
+    for (let i = 0; i < wordsArray.length; i++) {
+      let ignoreCondition = false;
+      if (ignoreCertainWords == "singleLetter")
+        ignoreCondition = wordsArray[i].length == 1;
+      if (ignoreCertainWords == "vowelStart")
+        ignoreCondition = /a|e|i|o|u/g.exec(wordsArray[i])?.index == 0;
+
+      if (ignoreCondition) {
+        wordsArray.splice(i, 1);
+        newWordsArray.splice(i, 1);
+        i--;
+      }
+    }
 
     for (let i = 0; i < wordsArray.length; i++) {
       // loop through each word in inputted string
@@ -135,6 +158,20 @@ export default function Home() {
         }
       }
     }
+
+    // add ignored words back into outputted text
+    for (let i = 0; i < originalWordsArray.length; i++) {
+      let ignoreCondition = false;
+      if (ignoreCertainWords == "singleLetter")
+        ignoreCondition = originalWordsArray[i].length == 1;
+      if (ignoreCertainWords == "vowelStart")
+        ignoreCondition = /a|e|i|o|u/g.exec(originalWordsArray[i])?.index == 0;
+
+      if (ignoreCondition) {
+        newWordsArray.splice(i, 0, originalWordsArray[i]);
+      }
+    }
+
     return newWordsArray.join(" ");
   }
 
@@ -166,7 +203,7 @@ export default function Home() {
           maxLength={1000000}
           required
         />
-        <div className="md:flex gap-3 md:w-min mx-auto mt-2">
+        <div className="md:flex gap-3 md:w-min mx-auto md:mt-2">
           <select
             onChange={(e) => setShiftDirection(e.currentTarget.value)}
             value={shiftDirection}
@@ -187,15 +224,26 @@ export default function Home() {
               <option value="letter">Switch first letter</option>
             </optgroup>
           </select>
-          <button
-            className="text-gray-100 font-medium rounded-md bg-orange-500 hover:bg-orange-600 active:bg-orange-700 transition px-3 py-2 mt-2 md:m-0"
-            onClick={() => {
-              setOutput(spoonerize(stringInput));
-            }}
+          <select
+            onChange={(e) => setIgnoreCertainWords(e.currentTarget.value)}
+            value={ignoreCertainWords}
+            className="input selectArrows text-sm w-full md:w-min mt-2 md:m-0"
           >
-            Spoonerize!
-          </button>
+            <optgroup label="Select words to ignore">
+              <option value="singleLetter">Ignore one-letter words</option>
+              <option value="vowelStart">Ignore vowel-starting words</option>
+              <option value="none">Don't ignore any words</option>
+            </optgroup>
+          </select>
         </div>
+        <button
+          className="flex text-gray-100 font-medium rounded-md bg-orange-500 hover:bg-orange-600 active:bg-orange-700 transition px-3 py-2 mx-auto mt-3"
+          onClick={() => {
+            setOutput(spoonerize(stringInput));
+          }}
+        >
+          Spoonerize!
+        </button>
         <h1 className="block text-center text-4xl mx-auto mt-10">{output}</h1>
       </div>
     </div>
