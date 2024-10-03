@@ -6,7 +6,7 @@ const lexend = Lexend({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={lexend.className}>
+    <main className={`bg-gray-100 h-screen ${lexend.className}`}>
       <Component {...pageProps} />
     </main>
   );
