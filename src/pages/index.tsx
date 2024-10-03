@@ -1,4 +1,5 @@
 import ResponsiveTextArea from "@/components/ResponsiveTextArea";
+import Head from "next/head";
 import { useState } from "react";
 
 export default function Home() {
@@ -108,21 +109,19 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 md:px-12 py-16 md:py-20">
-      <head>
+      <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <title>Spoonerizer</title>
-        <link rel="icon" type="image/png" href="" />
-
         <meta property="og:title" content="Spoonerizer" />
         <meta
           property="og:description"
           content="Create spoonerisms from any text."
         />
-        <meta name="theme-color" content="#83b5d3" />
-        <meta property="og:image" content="" />
-      </head>
+        <meta name="theme-color" content="#f97316" />
+        <meta property="og:image" content="/favicon.ico" />
+      </Head>
 
       <div className="w-full">
         <h1 className="text-center font-bold text-3xl mx-auto mb-10">
