@@ -9,63 +9,74 @@ export default function Home() {
 
   function spoonerize(string: string) {
     // initialize 2 arrays containing each word in the inputted text
-    let wordsArray = string
+    const wordsArray = string
       .toLocaleLowerCase()
       .replaceAll(/\s/g, " ")
       .split(" ")
       .filter((n) => n);
-    let newWordsArray = string
+    const newWordsArray = string
       .toLocaleLowerCase()
       .replaceAll(/\s/g, " ")
       .split(" ")
       .filter((n) => n);
 
     for (let i = 0; i < wordsArray.length; i++) {
+      // loop through each word in inputted string
       let letterIndexAfterSwitchPart;
+      // letterIndexAfterSwitchPart is the index of the first vowel or second letter
       if (switchPart == "sound")
         letterIndexAfterSwitchPart = /a|e|i|o|u/g.exec(wordsArray[i])?.index;
       if (switchPart == "letter") letterIndexAfterSwitchPart = 1;
-      let firstPart = wordsArray[i].substring(0, letterIndexAfterSwitchPart);
+      const firstPart = wordsArray[i].substring(0, letterIndexAfterSwitchPart);
 
       if (shiftDirection == "left") {
         if (i != 0) {
-          let letterIndexAfterSwitchPartNext;
+          // if NOT on the first word
+          let letterIndexAfterSwitchPartPrev;
+          // the index of the first vowel or second letter of the previous word
           if (switchPart == "sound")
-            letterIndexAfterSwitchPartNext = /a|e|i|o|u/g.exec(
+            letterIndexAfterSwitchPartPrev = /a|e|i|o|u/g.exec(
               wordsArray[i - 1]
             )?.index;
-          if (switchPart == "letter") letterIndexAfterSwitchPartNext = 1;
+          if (switchPart == "letter") letterIndexAfterSwitchPartPrev = 1;
 
+          // set previous word to current word's first part + the rest of the previous word
           newWordsArray[i - 1] =
             firstPart +
             wordsArray[i - 1].substring(
-              letterIndexAfterSwitchPartNext || 0,
+              letterIndexAfterSwitchPartPrev || 0,
               wordsArray[i - 1].length
             );
         } else {
-          let letterIndexAfterSwitchPartFirst;
+          // if on the first word
+          let letterIndexAfterSwitchPartLast;
+          // the index of the first vowel or second letter of the last word
           if (switchPart == "sound")
-            letterIndexAfterSwitchPartFirst = /a|e|i|o|u/g.exec(
+            letterIndexAfterSwitchPartLast = /a|e|i|o|u/g.exec(
               wordsArray[newWordsArray.length - 1]
             )?.index;
-          if (switchPart == "letter") letterIndexAfterSwitchPartFirst = 1;
+          if (switchPart == "letter") letterIndexAfterSwitchPartLast = 1;
 
+          // set last word to first word's first part + the rest of the last word
           newWordsArray[newWordsArray.length - 1] =
             firstPart +
             wordsArray[newWordsArray.length - 1].substring(
-              letterIndexAfterSwitchPartFirst || 0,
+              letterIndexAfterSwitchPartLast || 0,
               wordsArray[newWordsArray.length - 1].length
             );
         }
       } else if (shiftDirection == "right") {
         if (i != wordsArray.length - 1) {
+          // if NOT on the last word
           let letterIndexAfterSwitchPartNext;
+          // the index of the first vowel or second letter of the next word
           if (switchPart == "sound")
             letterIndexAfterSwitchPartNext = /a|e|i|o|u/g.exec(
               wordsArray[i + 1]
             )?.index;
           if (switchPart == "letter") letterIndexAfterSwitchPartNext = 1;
 
+          // set next word to current word's first part + the rest of the next word
           newWordsArray[i + 1] =
             firstPart +
             wordsArray[i + 1].substring(
@@ -73,13 +84,16 @@ export default function Home() {
               wordsArray[i + 1].length
             );
         } else {
+          // if on the last word
           let letterIndexAfterSwitchPartFirst;
+          // the index of the first vowel or second letter of the first word
           if (switchPart == "sound")
             letterIndexAfterSwitchPartFirst = /a|e|i|o|u/g.exec(
               wordsArray[0]
             )?.index;
           if (switchPart == "letter") letterIndexAfterSwitchPartFirst = 1;
 
+          // set first word to last word's first part + the rest of the first word
           newWordsArray[0] =
             firstPart +
             wordsArray[0].substring(

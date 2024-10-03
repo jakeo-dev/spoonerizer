@@ -35,7 +35,7 @@ export default function ResponsiveTextArea({
     window.addEventListener("resize", handleTextAreaResize);
 
     return () => window.removeEventListener("resize", handleTextAreaResize);
-  }, [textAreaRef.current, value]);
+  }, [value]);
 
   return (
     <textarea
