@@ -5,11 +5,18 @@ import { useState } from "react";
 export default function Home() {
   const [stringInput, setStringInput] = useState("");
   const [output, setOutput] = useState("");
-  const [shiftDirection, setShiftDirection] = useState("left"); // left, right
-  const [switchPart, setSwitchPart] = useState("sound"); // sound, letter
-  const [ignoreCertainWords, setIgnoreCertainWords] = useState("singleLetter"); // singleLetter (one-letter words), vowelStart (words that start with a vowel), none
 
-  function spoonerize(string: string) {
+  const [shiftDirectionInput, setShiftDirectionInput] = useState("left"); // left, right
+  const [switchPartInput, setSwitchPartInput] = useState("sound"); // sound, letter
+  const [ignoreCertainWordsInput, setIgnoreCertainWordsInput] =
+    useState("singleLetter"); // singleLetter (one-letter words), vowelStart (words that start with a vowel), none
+
+  function spoonerize(
+    string: string,
+    shiftDirection: string,
+    switchPart: string,
+    ignoreCertainWords: string
+  ) {
     // initialize 2 arrays containing each word in the inputted text
     const wordsArray = string
       .toLocaleLowerCase()
@@ -205,8 +212,8 @@ export default function Home() {
         />
         <div className="md:flex gap-3 md:w-min mx-auto md:mt-2">
           <select
-            onChange={(e) => setShiftDirection(e.currentTarget.value)}
-            value={shiftDirection}
+            onChange={(e) => setShiftDirectionInput(e.currentTarget.value)}
+            value={shiftDirectionInput}
             className="input selectArrows text-sm w-full md:w-min mt-2 md:m-0"
           >
             <optgroup label="Select a shift direction">
@@ -215,8 +222,8 @@ export default function Home() {
             </optgroup>
           </select>
           <select
-            onChange={(e) => setSwitchPart(e.currentTarget.value)}
-            value={switchPart}
+            onChange={(e) => setSwitchPartInput(e.currentTarget.value)}
+            value={switchPartInput}
             className="input selectArrows text-sm w-full md:w-min mt-2 md:m-0"
           >
             <optgroup label="Select a part to switch">
@@ -225,21 +232,28 @@ export default function Home() {
             </optgroup>
           </select>
           <select
-            onChange={(e) => setIgnoreCertainWords(e.currentTarget.value)}
-            value={ignoreCertainWords}
+            onChange={(e) => setIgnoreCertainWordsInput(e.currentTarget.value)}
+            value={ignoreCertainWordsInput}
             className="input selectArrows text-sm w-full md:w-min mt-2 md:m-0"
           >
             <optgroup label="Select words to ignore">
               <option value="singleLetter">Ignore one-letter words</option>
               <option value="vowelStart">Ignore vowel-starting words</option>
-              <option value="none">Don't ignore any words</option>
+              <option value="none">Do not ignore any words</option>
             </optgroup>
           </select>
         </div>
         <button
           className="flex text-gray-100 font-medium rounded-md bg-orange-500 hover:bg-orange-600 active:bg-orange-700 transition px-3 py-2 mx-auto mt-3"
           onClick={() => {
-            setOutput(spoonerize(stringInput));
+            setOutput(
+              spoonerize(
+                stringInput,
+                shiftDirectionInput,
+                switchPartInput,
+                ignoreCertainWordsInput
+              )
+            );
           }}
         >
           Spoonerize!
