@@ -9,7 +9,7 @@ export default function Home() {
   const [shiftDirectionInput, setShiftDirectionInput] = useState("left"); // left, right
   const [switchPartInput, setSwitchPartInput] = useState("sound"); // sound, letter
   const [ignoreCertainWordsInput, setIgnoreCertainWordsInput] =
-    useState("singleLetter"); // singleLetter (one-letter words), vowelStart (words that start with a vowel), none
+    useState("vowelStart"); // singleLetter (one-letter words), vowelStart (words that start with a vowel), none
 
   function spoonerize(
     string: string,
@@ -174,9 +174,7 @@ export default function Home() {
       if (ignoreCertainWords == "vowelStart")
         ignoreCondition = /a|e|i|o|u/g.exec(originalWordsArray[i])?.index == 0;
 
-      if (ignoreCondition) {
-        newWordsArray.splice(i, 0, originalWordsArray[i]);
-      }
+      if (ignoreCondition) newWordsArray.splice(i, 0, originalWordsArray[i]);
     }
 
     return newWordsArray.join(" ");
@@ -237,8 +235,8 @@ export default function Home() {
             className="input selectArrows text-sm w-full md:w-min mt-2 md:m-0"
           >
             <optgroup label="Select words to ignore">
-              <option value="singleLetter">Ignore one-letter words</option>
               <option value="vowelStart">Ignore vowel-starting words</option>
+              <option value="singleLetter">Ignore one-letter words</option>
               <option value="none">Do not ignore any words</option>
             </optgroup>
           </select>
